@@ -11,8 +11,8 @@ Disable-UAC
 
 Update-ExecutionPolicy Unrestricted
 
-Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowProtectedOSFiles -EnableShowFileExtensions -EnableShowFullPathInTitleBar
-Set-TaskbarOptions -Size Small -Lock -Combine Always -AlwaysShowIconsOn
+Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowProtectedOSFiles -EnableShowFileExtensions
+Set-TaskbarOptions -Size Small -Lock -Combine Always
 
 Disable-GameBarTips
 Disable-InternetExplorerESC
