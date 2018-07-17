@@ -1,5 +1,5 @@
-#START http://boxstarter.org/package/nr/url?https://raw.githubusercontent.com/felixrieseberg/windows-development-environment/master/boxstarter
 
+# START Install-BoxstarterPackage -PackageName https://raw.githubusercontent.com/Chakah/dev-environment/master/boxstarter.ps1 -DisableReboots
 #--- Temporary --
 Disable-UAC
 
