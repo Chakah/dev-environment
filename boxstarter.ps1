@@ -1,3 +1,4 @@
+#START http://boxstarter.org/package/nr/url?https://raw.githubusercontent.com/felixrieseberg/windows-development-environment/master/boxstarter
 
 #--- Temporary --
 Disable-UAC
