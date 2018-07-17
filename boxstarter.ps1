@@ -4,8 +4,8 @@
 Disable-UAC
 
 #--- Fonts ---
-choco install inconsolata -y
-choco install hasklig -y
+#choco install inconsolata -y
+#choco install hasklig -y
 
 #--- Windows Settings ---
 
