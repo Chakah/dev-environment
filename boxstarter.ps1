@@ -1,5 +1,10 @@
+
+#--- Temporary --
+Disable-UAC
+
 #--- Fonts ---
 choco install inconsolata -y
+choco install hasklig -y
 
 #--- Windows Settings ---
 
@@ -10,21 +15,44 @@ Set-TaskbarOptions -Size Small -Lock -Combine Always -AlwaysShowIconsOn
 
 Disable-GameBarTips
 Disable-InternetExplorerESC
-Disable-UAC
 Disable-BingSearch
 Enable-RemoteDesktop
+
+#Move-LibraryDirectory "Downloads" "E:\Downloads"
 
 #--- Windows Subsystems/Features ---
 choco install Microsoft-Hyper-V-All -source windowsFeatures
 choco install Microsoft-Windows-Subsystem-Linux -source windowsfeatures
 
-#--- Tools ---
-cinst -y hyper
-choco install git -params '"/GitAndUnixToolsOnPath /WindowsTerminal"' -y
-choco install sysinternals -y
-choco install vim
-choco install googlechrome
-choco install sharex
+#--- Programms ---
+choco install -y googlechrome 
+choco install -y ccleaner
+choco install -y ccenhancer
+
+choco install -y spotify
+choco install -y steam
+choco install -y discord
+
+#--- Work ---
+choco install -y hyper
+choco install -y git -params '"/GitAndUnixToolsOnPath /WindowsTerminal"'
+choco install -y sourcetree
+choco install -y sysinternals
+choco install -y vim
+choco install -y sharex
+choco install -y 7zip.install
+choco install -y chocolateygui
+choco install -y keepass.install
+choco install -y sysinternals
+choco install -y WindowsSystemControlCenter
+choco install -y curl
+choco install -y wget
+
+choco install -y sumatrapdf.install
+choco install -y ffmpeg
+
+choco install nodejs.install 
+
 
 ## Node, npm
 cinst -y nodejs.install
@@ -52,13 +80,16 @@ cinst -y 7zip.install
 cinst -y sysinternals
 cinst -y DotNet3.5
 
-# cinst -y DotNet4.0 -- not needed on windows 8
-# cinst -y DotNet4.5 -- not needed on windows 10
-# cinst -y PowerShell -- not needed on windows 10
 if (Test-PendingReboot) { Invoke-Reboot }
 
-# Pinning Things
+#--- Pinning Things ---
 Install-ChocolateyPinnedTaskBarItem "$env:programfiles\Google\Chrome\Application\chrome.exe"
+
+
+#--- Schedule updates to applications with chocolatey ---
+schtasks.exe /create /s "localhost" /ru "System" /tn "Update Chocolatey packages" /tr "%ChocolateyInstall%\bin\cup all" /sc DAILY /st 06:00 /F
+Write-BoxstarterMessage "Set update schedule for apps is finished"
+if (Test-PendingReboot) { Invoke-Reboot }
 
 #--- Uninstall unecessary applications that come with Windows out of the box ---
 
@@ -240,14 +271,6 @@ Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\P
 # To Restore:
 # Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Power' -Name AwayModeEnabled -Type DWord -Value 0
 
-# Use the Windows 7-8.1 Style Volume Mixer
-If (-Not (Test-Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\MTCUVC")) {
-	New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name MTCUVC | Out-Null
-}
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\MTCUVC" -Name EnableMtcUvc -Type DWord -Value 0
-# To Restore (Windows 10 Style Volume Control):
-# Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\MTCUVC" -Name EnableMtcUvc -Type DWord -Value 1
-
 # Disable Xbox Gamebar
 Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" -Name AppCaptureEnabled -Type DWord -Value 0
 Set-ItemProperty -Path "HKCU:\System\GameConfigStore" -Name GameDVR_Enabled -Type DWord -Value 0
@@ -258,14 +281,12 @@ If (-Not (Test-Path "HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Adv
 }
 Set-ItemProperty -Path "HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People" -Name PeopleBand -Type DWord -Value 0
 
+# Change Windows Updates to "Notify to schedule restart"
+Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings -Name UxOption -Type DWord -Value 1
+# To Restore (Automatic):
+#Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings -Name UxOption -Type DWord -Value 0
+
 #--- Restore Temporary Settings ---
 Enable-UAC
 Enable-MicrosoftUpdate
-Install-WindowsUpdate -acceptEula
-
-#--- Rename the Computer ---
-# Requires restart, or add the -Restart flag
-$computername = "acidburn"
-if ($env:computername -ne $computername) {
-	Rename-Computer -NewName $computername
-}
+Install-WindowsUpdate -acceptEula -GetUpdatesFromMS
