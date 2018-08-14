@@ -12,30 +12,23 @@ Disable-UAC
 Update-ExecutionPolicy Unrestricted
 
 Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowProtectedOSFiles -EnableShowFileExtensions
-Set-TaskbarOptions -Size Small -Lock -Combine Always
 
 Disable-GameBarTips
 Disable-InternetExplorerESC
 Disable-BingSearch
 Enable-RemoteDesktop
 
-#Move-LibraryDirectory "Downloads" "E:\Downloads"
-
-#--- Windows Subsystems/Features ---
-choco install Microsoft-Hyper-V-All -source windowsFeatures
-choco install Microsoft-Windows-Subsystem-Linux -source windowsfeatures
-
 #--- Programms ---
-choco install -y googlechrome 
+choco install -y googlechrome
 choco install -y ccleaner
 choco install -y ccenhancer
 
-choco install -y spotify
-choco install -y steam
-choco install -y discord
+#choco install -y spotify
+#choco install -y steam
+#choco install -y discord
 
 #--- Work ---
-choco install -y hyper
+#choco install -y hyper
 choco install -y git -params '"/GitAndUnixToolsOnPath /WindowsTerminal"'
 choco install -y sourcetree
 choco install -y sysinternals
@@ -44,48 +37,13 @@ choco install -y sharex
 choco install -y 7zip.install
 choco install -y chocolateygui
 choco install -y keepass.install
-choco install -y sysinternals
-choco install -y WindowsSystemControlCenter
-choco install -y curl
-choco install -y wget
-
-choco install -y sumatrapdf.install
-choco install -y ffmpeg
-
 choco install nodejs.install 
 
-
 ## Node, npm
-cinst -y nodejs.install
 npm install -g npm-windows-upgrade
-
-## Editors
-cinst -y visualstudiocode
-
-## Visual Studio 2017
-cinst -y visualstudio2017community
-if (Test-PendingReboot) { Invoke-Reboot }
-
-## Ruby, Go, Python
-cinst -y ruby
-cinst -y ruby.devkit
-
-cinst -y python2
-
-if (Test-PendingReboot) { Invoke-Reboot }
-
-## Basics
-cinst -y vlc
-cinst -y GoogleChrome
-cinst -y 7zip.install
-cinst -y sysinternals
-cinst -y DotNet3.5
-
-if (Test-PendingReboot) { Invoke-Reboot }
-
-#--- Pinning Things ---
-Install-ChocolateyPinnedTaskBarItem "$env:programfiles\Google\Chrome\Application\chrome.exe"
-
+npm install -g typescript
+npm install -g vsce
+npm install -g gradle
 
 #--- Schedule updates to applications with chocolatey ---
 schtasks.exe /create /s "localhost" /ru "System" /tn "Update Chocolatey packages" /tr "%ChocolateyInstall%\bin\cup all" /sc DAILY /st 06:00 /F
@@ -213,7 +171,6 @@ Get-AppxPackage Microsoft.ZuneMusic | Remove-AppxPackage
 Get-AppxPackage Microsoft.ZuneVideo | Remove-AppxPackage
 
 #--- Windows Settings ---
-# Some from: @NickCraver's gist https://gist.github.com/NickCraver/7ebf9efbfd0c3eab72e9
 
 # Privacy: Let apps use my advertising ID: Disable
 If (-Not (Test-Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo")) {
@@ -244,11 +201,6 @@ Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search -N
 Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name LaunchTo -Type DWord -Value 1
 # Change it back to "Quick Access" (Windows 10 default)
 # Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name LaunchTo -Type DWord -Value 2
-
-# Better File Explorer
-Set-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name NavPaneExpandToCurrentFolder -Value 1		
-Set-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name NavPaneShowAllFolders -Value 1		
-Set-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name MMTaskbarMode -Value 2
 
 # These make "Quick Access" behave much closer to the old "Favorites"
 # Disable Quick Access: Recent Files
